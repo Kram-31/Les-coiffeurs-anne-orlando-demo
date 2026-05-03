@@ -1015,10 +1015,13 @@
 <script type="text/babel" src="tweaks-panel.jsx"></script>
 <script>
   if (typeof window.useTweaks === 'undefined') {
-    window.useTweaks = function(defaults) {
-      return React.useState(defaults);
-    };
+    window.useTweaks = function(defaults) { return React.useState(defaults); };
     window.TweaksPanel = function() { return null; };
+    window.TweakSection = function() { return null; };
+    window.TweakToggle = function() { return null; };
+    window.TweakColor = function() { return null; };
+    window.TweakSlider = function() { return null; };
+    window.TweakRadio = function() { return null; };
   }
 </script>
 
