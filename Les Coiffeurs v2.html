@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les Coiffeurs — Anne Laure & Orlando</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✂</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    --creme: #F2EDE4;
+    --creme-dark: #E8E2D8;
+    --noir: #141414;
+    --noir-soft: #2A2826;
+    --blanc: #FDFAF6;
+    --accent: #1A1A1A;
+    --rouge: #8B2E2E;
+    --font-titre: 'Cormorant Garamond', Georgia, serif;
+    --font-corps: 'Montserrat', Helvetica, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--creme);
+    color: var(--noir);
+    font-family: var(--font-corps);
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--creme); }
+  ::-webkit-scrollbar-thumb { background: var(--noir); }
+
+  /* ─── NAV ─── */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 24px 48px;
+    background: linear-gradient(to bottom, rgba(242,237,228,0.72) 0%, transparent 100%);
+    transition: all 0.5s ease;
+  }
+
+  .nav.scrolled {
+    background: rgba(242,237,228,0.95);
+    backdrop-filter: blur(16px);
+    padding: 16px 48px;
+    border-bottom: 1px solid rgba(20,20,20,0.1);
+    mix-blend-mode: normal;
+  }
+
+  .nav-left {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .nav-right {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .nav-link {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--noir);
+    text-decoration: none;
+    opacity: 0.55;
+    transition: opacity 0.3s;
+  }
+  .nav-link:hover { opacity: 1; }
+
+  .nav-logo {
+    font-family: var(--font-titre);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--noir);
+    text-align: center;
+    cursor: pointer;
+    line-height: 1.2;
+  }
+
+  .nav-cta-v2 {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--blanc);
+    background: var(--noir);
+    padding: 10px 22px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .nav-cta-v2:hover { background: var(--noir-soft); }
+
+  /* ─── HERO ─── */
+  .hero-v2 {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    background: var(--creme);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 160px 60px 240px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-issue {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(20,20,20,0.35);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-issue::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: currentColor;
+  }
+
+  .hero-big-title {
+    font-family: var(--font-titre);
+    font-size: clamp(72px, 8vw, 128px);
+    font-weight: 300;
+    line-height: 0.9;
+    color: var(--noir);
+    margin-bottom: 40px;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-big-title .italic {
+    font-style: italic;
+    font-weight: 300;
+    display: block;
+  }
+
+  .hero-location {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 52px;
+  }
+
+  .hero-location-line {
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--noir);
+    opacity: 0.3;
+  }
+
+  .hero-location-text {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(20,20,20,0.5);
+  }
+
+  .hero-ctas-v2 {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .btn-dark {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--blanc);
+    background: var(--noir);
+    padding: 16px 40px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-dark:hover { background: #2A2826; transform: translateY(-1px); }
+
+  .btn-outline-dark {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--noir);
+    background: transparent;
+    padding: 16px 40px;
+    border: 1px solid rgba(20,20,20,0.25);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-outline-dark:hover { border-color: var(--noir); }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+    background: var(--noir);
+  }
+
+  .hero-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    animation: heroZoom 18s ease-in-out infinite alternate;
+    display: block;
+  }
+
+  @keyframes heroZoom {
+    from { transform: scale(1.0); }
+    to { transform: scale(1.07); }
+  }
+
+  .hero-right-caption {
+    position: absolute;
+    bottom: 48px;
+    left: 40px;
+    right: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .hero-caption-tag {
+    font-family: var(--font-titre);
+    font-style: italic;
+    font-size: 18px;
+    color: rgba(242,237,228,0.7);
+  }
+
+  .hero-caption-num {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: rgba(242,237,228,0.4);
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+  }
+
+  /* scroll bar vertical */
+  .hero-scroll-v2 {
+    position: absolute;
+    bottom: 40px;
+    left: 60px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 3;
+  }
+
+  .scroll-v2-line {
+    width: 40px;
+    height: 1px;
+    background: var(--noir);
+    opacity: 0.3;
+    animation: scrollExpand 2s ease-in-out infinite;
+    transform-origin: left;
+  }
+
+  @keyframes scrollExpand {
+    0%, 100% { transform: scaleX(1); opacity: 0.3; }
+    50% { transform: scaleX(1.4); opacity: 0.6; }
+  }
+
+  /* ─── MARQUEE ─── */
+  .marquee-bar {
+    background: var(--noir);
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .marquee-inner {
+    display: inline-flex;
+    gap: 0;
+    animation: marqueeScroll 18s linear infinite;
+  }
+
+  .marquee-item {
+    font-family: var(--font-titre);
+    font-style: italic;
+    font-size: 15px;
+    color: rgba(242,237,228,0.6);
+    padding: 0 40px;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+
+  .marquee-sep {
+    color: rgba(242,237,228,0.2);
+    padding: 0 8px;
+  }
+
+  @keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── ABOUT STRIP ─── */
+  .about-strip {
+    display: grid;
+    grid-template-columns: 1fr 2px 1fr 2px 2fr;
+    padding: 80px 80px;
+    gap: 60px;
+    align-items: center;
+    border-bottom: 1px solid rgba(20,20,20,0.08);
+  }
+
+  .about-strip-divider {
+    background: rgba(20,20,20,0.1);
+    height: 80px;
+    align-self: center;
+  }
+
+  .about-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .about-num {
+    font-family: var(--font-titre);
+    font-size: 56px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--noir);
+  }
+
+  .about-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(20,20,20,0.4);
+  }
+
+  /* ─── SERVICES V2 ─── */
+  .services-v2 {
+    padding: 120px 0;
+    background: var(--blanc);
+  }
+
+  .services-v2-header {
+    padding: 0 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+    margin-bottom: 80px;
+  }
+
+  .services-v2 .section-title {
+    font-family: var(--font-titre);
+    font-size: clamp(48px, 5vw, 80px);
+    font-weight: 300;
+    line-height: 1.0;
+    color: var(--noir);
+  }
+
+  .services-v2-desc {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.9;
+    color: rgba(20,20,20,0.55);
+    max-width: 380px;
+  }
+
+  .services-v2-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid rgba(20,20,20,0.1);
+    padding: 0 80px;
+    margin-bottom: 0;
+  }
+
+  .service-tab {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(20,20,20,0.35);
+    padding: 16px 32px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+
+  .service-tab.active {
+    color: var(--noir);
+    border-bottom-color: var(--noir);
+  }
+
+  .service-tab:hover { color: var(--noir); }
+
+  .service-panel {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .service-panel.active { display: grid; }
+
+  .service-panel-left {
+    padding: 64px 80px;
+    background: var(--blanc);
+  }
+
+  .service-panel-right {
+    background: var(--creme);
+    overflow: hidden;
+    position: relative;
+    min-height: 480px;
+  }
+
+  .service-panel-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s ease;
+  }
+
+  .service-panel:hover .service-panel-right img { transform: scale(1.04); }
+
+  .service-list-v2 {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .service-row-v2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(20,20,20,0.07);
+    gap: 20px;
+  }
+
+  .service-row-v2:last-child { border-bottom: none; }
+
+  .service-row-name {
+    font-family: var(--font-titre);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--noir);
+  }
+
+  .service-row-dots {
+    flex: 1;
+    height: 1px;
+    background: repeating-linear-gradient(to right, rgba(20,20,20,0.12) 0, rgba(20,20,20,0.12) 3px, transparent 3px, transparent 8px);
+    min-width: 20px;
+    align-self: center;
+  }
+
+  .service-row-price {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(20,20,20,0.5);
+    white-space: nowrap;
+  }
+
+  .service-panel-cta {
+    margin-top: 40px;
+  }
+
+  /* ─── GALERIE V2 ─── */
+  .galerie-v2 {
+    padding: 120px 0;
+    background: var(--creme);
+  }
+
+  .galerie-v2-header {
+    padding: 0 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 48px;
+  }
+
+  .galerie-v2 .section-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .galerie-v2 .eyebrow-line {
+    width: 32px;
+    height: 1px;
+    background: var(--noir);
+    opacity: 0.3;
+  }
+
+  .galerie-v2 .eyebrow-text {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(20,20,20,0.4);
+  }
+
+  .galerie-v2 .section-title {
+    font-family: var(--font-titre);
+    font-size: clamp(44px, 5vw, 72px);
+    font-weight: 300;
+    line-height: 1.0;
+    color: var(--noir);
+  }
+
+  .galerie-v2-strip {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.4fr;
+    gap: 3px;
+    padding: 0 0;
+  }
+
+  .gal-item-v2 {
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .gal-item-v2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s ease;
+    min-height: 500px;
+  }
+
+  .gal-item-v2:hover img { transform: scale(1.05); }
+
+  .gal-item-v2::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(20,20,20,0);
+    transition: background 0.4s;
+  }
+
+  .gal-item-v2:hover::after { background: rgba(20,20,20,0.1); }
+
+  /* ─── AVIS V2 CAROUSEL ─── */
+  .avis-v2 {
+    padding: 120px 0;
+    background: var(--noir);
+    overflow: hidden;
+  }
+  .avis-v2-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 56px;
+    padding: 0 80px;
+  }
+  .avis-v2 .section-title {
+    font-family: var(--font-titre);
+    font-size: clamp(44px, 4vw, 68px);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--creme);
+  }
+  .avis-v2-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 14px;
+  }
+  .avis-v2-sub {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: rgba(242,237,228,0.3);
+  }
+  .avis-nav {
+    display: flex;
+    gap: 8px;
+  }
+  .avis-nav-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(242,237,228,0.15);
+    background: transparent;
+    color: rgba(242,237,228,0.5);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    line-height: 1;
+  }
+  .avis-nav-btn:hover { border-color: rgba(242,237,228,0.5); color: var(--creme); }
+  .avis-track-outer { overflow: hidden; padding: 0 80px; }
+  .avis-track {
+    display: flex;
+    gap: 2px;
+    transition: transform 0.6s cubic-bezier(0.77,0,0.175,1);
+  }
+  .avis-v2-card {
+    flex: 0 0 calc(33.333% - 2px);
+    background: rgba(242,237,228,0.03);
+    padding: 48px 44px;
+    transition: background 0.4s;
+    border-top: 1px solid rgba(242,237,228,0.07);
+    min-width: 0;
+  }
+  .avis-v2-card:hover { background: rgba(242,237,228,0.06); }
+  .avis-v2-num {
+    font-family: var(--font-titre);
+    font-size: 52px;
+    font-weight: 300;
+    color: rgba(242,237,228,0.04);
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .avis-v2-stars { display: flex; gap: 3px; margin-bottom: 18px; }
+  .avis-v2-star { font-size: 11px; color: rgba(242,237,228,0.4); }
+  .avis-v2-text {
+    font-family: var(--font-titre);
+    font-style: italic;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: rgba(242,237,228,0.82);
+    margin-bottom: 24px;
+  }
+  .avis-v2-author {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(242,237,228,0.28);
+  }
+  .avis-v2-date {
+    font-size: 10px;
+    font-weight: 300;
+    color: rgba(242,237,228,0.16);
+    margin-top: 3px;
+    letter-spacing: 0.08em;
+  }
+  .avis-dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 36px 80px 0;
+  }
+  .avis-dot {
+    height: 1px;
+    background: rgba(242,237,228,0.18);
+    cursor: pointer;
+    transition: all 0.4s;
+    width: 20px;
+  }
+  .avis-dot.active { width: 40px; background: rgba(242,237,228,0.55); }
+
+  /* ─── RESERVATION V2 ─── */
+  .res-v2 {
+    background: var(--blanc);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 600px;
+  }
+
+  .res-v2-left {
+    padding: 100px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid rgba(20,20,20,0.08);
+  }
+
+  .res-v2 .section-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .res-v2 .eyebrow-line { width: 32px; height: 1px; background: var(--noir); opacity: 0.25; }
+  .res-v2 .eyebrow-text {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(20,20,20,0.4);
+  }
+
+  .res-v2 .section-title {
+    font-family: var(--font-titre);
+    font-size: clamp(44px, 4vw, 68px);
+    font-weight: 300;
+    line-height: 1.0;
+    color: var(--noir);
+    margin-bottom: 32px;
+  }
+
+  .res-v2-desc {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.9;
+    color: rgba(20,20,20,0.5);
+    margin-bottom: 48px;
+    max-width: 400px;
+  }
+
+  .res-v2-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+
+  .res-v2-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(20,20,20,0.06);
+  }
+
+  .res-v2-item-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(20,20,20,0.3);
+    min-width: 72px;
+    padding-top: 2px;
+  }
+
+  .res-v2-item-val {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--noir);
+    line-height: 1.6;
+  }
+
+  .res-v2-right {
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 100px;
+    background: var(--creme);
+  }
+
+  .planity-v2 {
+    background: var(--blanc);
+    border: 1px solid rgba(20,20,20,0.1);
+  }
+
+  .planity-v2-header {
+    padding: 28px 32px;
+    border-bottom: 1px solid rgba(20,20,20,0.07);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .planity-v2-title {
+    font-family: var(--font-titre);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--noir);
+  }
+
+  .planity-v2-badge {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(20,20,20,0.3);
+  }
+
+  .planity-v2-body {
+    padding: 32px;
+  }
+
+  .planity-v2-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(20,20,20,0.4);
+    margin-bottom: 14px;
+  }
+
+  .planity-v2-slots {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+
+  .planity-v2-slot {
+    padding: 11px 8px;
+    border: 1px solid rgba(20,20,20,0.1);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--noir);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    background: transparent;
+  }
+
+  .planity-v2-slot:hover { background: var(--creme); border-color: rgba(20,20,20,0.25); }
+  .planity-v2-slot.selected { background: var(--noir); color: var(--blanc); border-color: var(--noir); }
+
+  .planity-v2-note {
+    font-size: 10px;
+    color: rgba(20,20,20,0.3);
+    letter-spacing: 0.08em;
+    text-align: center;
+    padding-top: 16px;
+    border-top: 1px solid rgba(20,20,20,0.06);
+  }
+
+  /* ─── FOOTER V2 ─── */
+  .footer-v2 {
+    background: var(--creme-dark);
+    padding: 80px 80px 40px;
+    border-top: 1px solid rgba(20,20,20,0.1);
+  }
+
+  .footer-v2-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid rgba(20,20,20,0.08);
+    margin-bottom: 40px;
+  }
+
+  .footer-v2-logo {
+    font-family: var(--font-titre);
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--noir);
+    margin-bottom: 12px;
+  }
+
+  .footer-v2-tagline {
+    font-family: var(--font-titre);
+    font-style: italic;
+    font-size: 17px;
+    color: rgba(20,20,20,0.4);
+    line-height: 1.5;
+    margin-bottom: 28px;
+  }
+
+  .footer-v2-socials {
+    display: flex;
+    gap: 12px;
+  }
+
+  .social-v2 {
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(242,237,228,0.15);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s;
+    cursor: pointer;
+    opacity: 0.75;
+  }
+
+  .social-v2:hover { opacity: 1; border-color: rgba(242,237,228,0.35); background: rgba(242,237,228,0.06); }
+
+  .footer-v2-col-title {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(20,20,20,0.35);
+    margin-bottom: 20px;
+  }
+
+  .footer-v2-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-v2-links a {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(20,20,20,0.55);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .footer-v2-links a:hover { color: var(--noir); }
+
+  .footer-v2-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-v2-info-item {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(20,20,20,0.55);
+    line-height: 1.6;
+  }
+
+  .footer-v2-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-v2-copy {
+    font-size: 11px;
+    font-weight: 300;
+    color: rgba(20,20,20,0.3);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-v2-scissor {
+    font-size: 16px;
+    opacity: 0.3;
+  }
+
+  /* ─── MAP ─── */
+  .map-section {
+    width: 100%;
+    height: 420px;
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid rgba(20,20,20,0.08);
+  }
+
+  .map-section iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    filter: grayscale(20%) contrast(1.05);
+  }
+
+  /* ─── REVEAL ─── */
+  .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal.revealed { opacity: 1; transform: none; }
+  .reveal-left { opacity: 0; transform: translateX(-24px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal-left.revealed { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    .hero-v2 { grid-template-columns: 1fr; }
+    .hero-right { height: 50vh; }
+    .about-strip { grid-template-columns: 1fr; gap: 32px; }
+    .about-strip-divider { display: none; }
+    .services-v2-header { grid-template-columns: 1fr; }
+    .service-panel { grid-template-columns: 1fr; }
+    .galerie-v2-strip { grid-template-columns: 1fr 1fr; }
+    .avis-track-outer { padding: 0 24px; }
+    .avis-v2-card { flex: 0 0 calc(100% - 2px); }
+    .avis-v2-header { padding: 0 24px; }
+    .avis-dots { padding: 24px 24px 0; }
+    .res-v2 { grid-template-columns: 1fr; }
+    .footer-v2-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .nav { padding: 16px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "lang": "fr",
+  "heroLayout": "split",
+  "showMarquee": true,
+  "cardStyle": "minimal"
+}/*EDITMODE-END*/;
+
+const T = {
+  fr: {
+    nav: ["Services", "Galerie", "Réservation"],
+    navCta: "Réserver",
+    issue: "Mirepoix, Ariège · Depuis 2018",
+    titleLine1: "Les",
+    titleLine2: "Coiffeurs",
+    titleLine3: "Anne Laure",
+    titleLine4: "& Orlando",
+    location: "Mirepoix, Ariège",
+    cta1: "Prendre rendez-vous",
+    cta2: "Nos services",
+    heroCap: "L'art de la coiffure",
+    aboutNums: [
+      { n: "8+", label: "Années d'expérience" },
+      { n: "3", label: "Artisans coiffeurs" },
+    ],
+    aboutDesc: "Un salon pensé pour le confort et l'élégance, au cœur de Mirepoix. Anne Laure, Orlando et Sandrine vous accueillent.",
+    servTitle: ["Savoir-", "Faire"],
+    servDesc: "Chaque soin est une invitation au bien-être.\nAnne Laure et Orlando mettent leur expertise à votre service.",
+    tabs: ["Elle", "Lui", "Barbier"],
+    services: [
+      { items: [
+        {n:"Coupe & Brushing", p:"dès 35€"}, {n:"Couleur / Mèches", p:"dès 62€"},
+        {n:"Balayage", p:"sur devis"}, {n:"Soin Davines", p:"dès 13€"}, {n:"Coiffage Mariage", p:"sur devis"}
+      ], img: "images/IMG_0980.jpg" },
+      { items: [
+        {n:"Coupe Homme", p:"dès 28€"}, {n:"Coupe Enfant", p:"dès 12€"},
+        {n:"Coloration", p:"dès 62€"}, {n:"Soin", p:"dès 13€"}, {n:"Forfait Coupe + Barbe", p:"39€"}
+      ], img: "images/IMG_0976.jpg" },
+      { items: [
+        {n:"Taille de Barbe", p:"sur devis"}, {n:"Rasage Traditionnel", p:"sur devis"},
+        {n:"Contour Précis", p:"sur devis"}, {n:"Soin Visage", p:"sur devis"}, {n:"Forfait Barbe + Coupe", p:"39€"}
+      ], img: "images/IMG_0987.jpg" }
+    ],
+    servCta: "Réserver ce soin",
+    galTitle: ["Atmo-", "sphère"],
+    galSub: "Nos espaces",
+    avisTitle: ["Ils nous", "font confiance"],
+    avisTotal: "5.0 · Planity",
+    avis: [
+      { text: "J'avais besoin d'une coupe depuis un bon moment déjà et clairement, ça a été la meilleure chose qu'on ait pu faire.", author: "Akira C.", date: "Octobre 2023" },
+      { text: "De passage à Mirepoix, nous avons reçu un accueil absolument charmant par Orlando. Coupe très réussie pour mon fils, et petites retouches offertes.", author: "Odile Fraboulet", date: "Août 2024" },
+      { text: "Les coiffeurs les plus sympathiques de la région ! Prix justes, travail de qualité, excellents conseils. Bonus : rafraîchissements offerts.", author: "Elsa A.", date: "Octobre 2024" },
+      { text: "Un salon ultra professionnel que je recommande à 100 %. Anne-Laure a été au top : elle a pris le temps de m'expliquer, de me conseiller.", author: "Cynthia Balayé", date: "Décembre 2024" },
+      { text: "Orlando est passionné par son métier, ça se voit. Le fondu est tellement bien fait ! Avec les explications et conseils coiffage en prime — excellent !", author: "Alexandre M.", date: "Mai 2025" },
+      { text: "Salon agréable, accueil chaleureux, une très bonne équipe. Je recommande vivement.", author: "Chantal S.", date: "Mai 2025" }
+    ],
+    resEyebrow: "Réservation",
+    resTitle: ["Prenez", "rendez-vous"],
+    resDesc: "Réservez en ligne 24h/24 via Planity, ou appelez-nous directement.",
+    resItems: [
+      { label: "Téléphone", val: "05 61 68 95 74", link: "tel:0561689574" },
+      { label: "Adresse", val: "39 Cours Colonel Petitpied\n09500 Mirepoix", link: MAPS_URL },
+      { label: "Horaires", val: "Mar–Mer : 10h–19h\nJeu : 10h–18h\nVen : 9h–19h\nSam : 9h–17h\nDim–Lun : Fermé" },
+    ],
+    planityTitle: "Disponibilités",
+    planityBadge: "Planity",
+    planityLabel: "Créneaux disponibles",
+    planitySlots: ["10:00", "10:30", "11:00", "14:00", "14:30", "15:00"],
+    planityNote: "Widget Planity intégré ici",
+    mapsBtn: "Itinéraire Google Maps",
+    footLinks: ["Accueil", "Services", "Galerie", "Réservation"],
+    footTagline: "L'art de la coiffure, à Mirepoix.",
+    footNav: "Navigation",
+    footContact: "Contact",
+    footHours: "Horaires",
+    footHoursItems: ["Mar–Mer : 10h–19h", "Jeu : 10h–18h · Ven : 9h–19h", "Sam : 9h–17h · Dim–Lun : Fermé"],
+    footCopy: "© 2026 Les Coiffeurs Anne Laure & Orlando · Mirepoix"
+  },
+  en: {
+    nav: ["Services", "Gallery", "Booking"],
+    navCta: "Book",
+    issue: "Mirepoix, Ariège · Since 2018",
+    titleLine1: "Les",
+    titleLine2: "Coiffeurs",
+    titleLine3: "Anne Laure",
+    titleLine4: "& Orlando",
+    location: "Mirepoix, Ariège",
+    cta1: "Book an appointment",
+    cta2: "Our services",
+    heroCap: "The art of hairdressing",
+    aboutNums: [
+      { n: "8+", label: "Years of experience" },
+      { n: "2", label: "Artisan hairdressers" },
+    ],
+    aboutDesc: "A salon designed for comfort and elegance, in the heart of Mirepoix. Anne Laure, Orlando and Sandrine welcome you.",
+    servTitle: ["Expert-", "ise"],
+    servDesc: "Each service is an invitation to well-being. Anne Laure and Orlando bring their expertise to you.",
+    tabs: ["Her", "Him", "Barber"],
+    services: [
+      { items: [
+        {n:"Cut & Blowdry", p:"from €35"}, {n:"Color / Highlights", p:"from €62"},
+        {n:"Balayage", p:"on quote"}, {n:"Davines Treatment", p:"from €13"}, {n:"Bridal Styling", p:"on quote"}
+      ], img: "images/IMG_0980.jpg" },
+      { items: [
+        {n:"Men's Cut", p:"from €28"}, {n:"Kids' Cut", p:"from €12"},
+        {n:"Color", p:"from €62"}, {n:"Treatment", p:"from €13"}, {n:"Cut + Beard", p:"€39"}
+      ], img: "images/IMG_0976.jpg" },
+      { items: [
+        {n:"Beard Trim", p:"on quote"}, {n:"Traditional Shave", p:"on quote"},
+        {n:"Precise Outline", p:"on quote"}, {n:"Face Care", p:"on quote"}, {n:"Beard + Cut", p:"€39"}
+      ], img: "images/IMG_0987.jpg" }
+    ],
+    servCta: "Book this service",
+    galTitle: ["Atmo-", "sphere"],
+    galSub: "Our spaces",
+    avisTitle: ["Trusted by", "our clients"],
+    avisTotal: "4.9 · Google",
+    avis: [
+      { text: "I had needed a haircut for a while and this was clearly the best thing we could have done.", author: "Akira C.", date: "October 2023" },
+      { text: "Passing through Mirepoix, we received an absolutely charming welcome from Orlando. Great haircut for my son, and small touch-ups offered for free.", author: "Odile Fraboulet", date: "August 2024" },
+      { text: "I was looking for a new salon and I found it. Orlando seems so passionate about his craft. I love my new haircut.", author: "Alexandre M.", date: "May 2025" },
+      { text: "An ultra-professional salon I recommend 100%. Anne-Laure was amazing — she took the time to explain and advise me.", author: "Cynthia Balayé", date: "December 2025" },
+      { text: "My haircut is perfect, very professional.", author: "Véronique B.", date: "February 2026" },
+      { text: "Great salon! Anne Laure and Orlando are very professional and attentive. You always leave looking great.", author: "Sophie Roques", date: "2024" }
+    ],
+    resEyebrow: "Booking",
+    resTitle: ["Book your", "appointment"],
+    resDesc: "Book online 24/7 via Planity, or call us directly.",
+    resItems: [
+      { label: "Phone", val: "05 61 68 95 74", link: "tel:0561689574" },
+      { label: "Address", val: "39 Cours Colonel Petitpied\n09500 Mirepoix", link: MAPS_URL },
+      { label: "Hours", val: "Tue–Wed: 10am–7pm\nThu: 10am–6pm\nFri: 9am–7pm\nSat: 9am–5pm\nSun–Mon: Closed" },
+    ],
+    planityTitle: "Availability",
+    planityBadge: "Planity",
+    planityLabel: "Available slots",
+    planitySlots: ["10:00", "10:30", "11:00", "14:00", "14:30", "15:00"],
+    planityNote: "Planity widget embedded here",
+    mapsBtn: "Get Directions",
+    footLinks: ["Home", "Services", "Gallery", "Booking"],
+    footTagline: "The art of hairdressing, in Mirepoix.",
+    footNav: "Navigation",
+    footContact: "Contact",
+    footHours: "Hours",
+    footHoursItems: ["Tue–Wed: 10am–7pm", "Thu: 10am–6pm · Fri: 9am–7pm", "Sat: 9am–5pm · Sun–Mon: Closed"],
+    footCopy: "© 2026 Les Coiffeurs Anne Laure & Orlando · Mirepoix"
+  }
+};
+
+const IMGS = {
+  hero: "images/IMG_0977.jpg",
+  g1:   "images/IMG_0982.jpg",
+  g2:   "images/IMG_0979.jpg",
+  g3:   "images/IMG_0974.jpg",
+  g4:   "images/IMG_0986.jpg",
+};
+
+const marqueeItems = ["Anne Laure", "Orlando", "Sandrine", "Coupe", "Couleur", "Balayage", "Barbe", "Mirepoix", "Ariège", "Davines", "Planity"];
+const PLANITY_URL = "https://www.planity.com/les-coiffeurs-09500-mirepoix";
+const MAPS_URL = "https://maps.google.com/?q=39+Cours+Colonel+Petitpied+09500+Mirepoix";
+
+function Nav({ t, lang, setLang, scrolled }) {
+  return (
+    <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
+      <div className="nav-left">
+        {t.nav.slice(0,2).map((item, i) => (
+          <a key={i} href={`#${['services','galerie'][i]}`} className="nav-link">{item}</a>
+        ))}
+      </div>
+      <div className="nav-logo" onClick={() => window.scrollTo({top:0,behavior:'smooth'})}>
+        Les Coiffeurs
+      </div>
+      <div className="nav-right">
+        <a href="#reservation" className="nav-link">{t.nav[2]}</a>
+        <button className="lang-btn" onClick={() => setLang(lang==='fr'?'en':'fr')}
+          style={{fontSize:10,fontWeight:500,letterSpacing:'0.2em',color:'rgba(20,20,20,0.4)',border:'none',background:'transparent',cursor:'pointer',textTransform:'uppercase'}}>
+          {lang==='fr'?'EN':'FR'}
+        </button>
+        <button className="nav-cta-v2" onClick={() => window.open(PLANITY_URL,'_blank')}>{t.navCta}</button>
+      </div>
+    </nav>
+  );
+}
+
+function Hero({ t }) {
+  return (
+    <section className="hero-v2" id="hero" data-screen-label="Hero">
+      <div className="hero-left">
+        <div className="hero-issue">{t.issue}</div>
+        <h1 className="hero-big-title">
+          <span>{t.titleLine1}</span>
+          <span className="italic">{t.titleLine2}</span>
+          <span style={{fontSize:'0.55em', display:'block', marginTop:8, opacity:0.5}}>{t.titleLine3} {t.titleLine4}</span>
+        </h1>
+        <div className="hero-location">
+          <div className="hero-location-line"/>
+          <span className="hero-location-text">{t.location}</span>
+        </div>
+        <div className="hero-ctas-v2">
+          <button className="btn-dark" onClick={() => window.open(PLANITY_URL,'_blank')}>{t.cta1}</button>
+          <button className="btn-outline-dark" onClick={() => document.getElementById('services').scrollIntoView()}>{t.cta2}</button>
+        </div>
+        <div className="hero-scroll-v2">
+          <div className="scroll-v2-line"/>
+        </div>
+      </div>
+      <div className="hero-right">
+        <img src={IMGS.hero} alt="Salon Les Coiffeurs"/>
+        <div className="hero-right-caption">
+          <span className="hero-caption-tag">{t.heroCap}</span>
+          <span className="hero-caption-num">01 / 01</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Marquee({ show }) {
+  if (!show) return null;
+  const items = [...marqueeItems, ...marqueeItems];
+  return (
+    <div className="marquee-bar">
+      <div className="marquee-inner">
+        {items.map((item, i) => (
+          <span key={i} className="marquee-item">
+            {item}
+            {i < items.length - 1 && <span className="marquee-sep">·</span>}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AboutStrip({ t }) {
+  return (
+    <div className="about-strip reveal">
+      {t.aboutNums.map((a, i) => (
+        <React.Fragment key={i}>
+          <div className="about-item">
+            <div className="about-num">{a.n}</div>
+            <div className="about-label">{a.label}</div>
+          </div>
+          {i < t.aboutNums.length - 1 && <div className="about-strip-divider"/>}
+        </React.Fragment>
+      ))}
+      <div className="about-strip-divider"/>
+      <div style={{display:'flex', alignItems:'center'}}>
+        <p style={{fontSize:14,fontWeight:300,lineHeight:1.8,color:'rgba(20,20,20,0.5)',maxWidth:360}}>{t.aboutDesc}</p>
+      </div>
+    </div>
+  );
+}
+
+function Services({ t }) {
+  const [activeTab, setActiveTab] = useState(0);
+  return (
+    <section className="services-v2 reveal" id="services" data-screen-label="Services">
+      <div className="services-v2-header">
+        <h2 className="section-title">{t.servTitle[0]}<br/>{t.servTitle[1]}</h2>
+        <p className="services-v2-desc" style={{whiteSpace:'pre-line'}}>{t.servDesc}</p>
+      </div>
+      <div className="services-v2-tabs">
+        {t.tabs.map((tab, i) => (
+          <button key={i} className={`service-tab ${activeTab===i?'active':''}`} onClick={() => setActiveTab(i)}>
+            {tab}
+          </button>
+        ))}
+      </div>
+      {t.services.map((svc, i) => (
+        <div key={i} className={`service-panel ${activeTab===i?'active':''}`}>
+          <div className="service-panel-left">
+            <ul className="service-list-v2">
+              {svc.items.map((item, j) => (
+                <li key={j} className="service-row-v2">
+                  <span className="service-row-name">{item.n}</span>
+                  <div className="service-row-dots"/>
+                  <span className="service-row-price">{item.p}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="service-panel-cta">
+              <button className="btn-dark" onClick={() => window.open(PLANITY_URL,'_blank')}>
+                {t.servCta}
+              </button>
+            </div>
+          </div>
+          <div className="service-panel-right">
+            <img src={svc.img} alt={t.tabs[i]} loading="lazy"/>
+          </div>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function Galerie({ t }) {
+  return (
+    <section className="galerie-v2 reveal" id="galerie" data-screen-label="Galerie">
+      <div className="galerie-v2-header">
+        <div>
+          <div className="section-eyebrow">
+            <div className="eyebrow-line"/>
+            <span className="eyebrow-text">{t.galSub}</span>
+          </div>
+          <h2 className="section-title">{t.galTitle[0]}<br/>{t.galTitle[1]}</h2>
+        </div>
+      </div>
+      <div className="galerie-v2-strip">
+        {[IMGS.hero, IMGS.g1, IMGS.g3, IMGS.g4].map((src, i) => (
+          <div key={i} className="gal-item-v2">
+            <img src={src} alt="" loading="lazy"/>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Avis({ t }) {
+  const PER_PAGE = 3;
+  const total = t.avis.length;
+  const pages = Math.ceil(total / PER_PAGE);
+  const [page, setPage] = useState(0);
+
+  const prev = () => setPage(p => (p - 1 + pages) % pages);
+  const next = () => setPage(p => (p + 1) % pages);
+
+  // auto-advance only when section visible
+  useEffect(() => {
+    const section = document.getElementById('avis');
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setPage(0);
+        const id = setInterval(() => setPage(p => (p + 1) % pages), 5000);
+        observer.disconnect();
+        return () => clearInterval(id);
+      }
+    }, { threshold: 0.3 });
+    if (section) observer.observe(section);
+    return () => observer.disconnect();
+  }, [pages]);
+
+  return (
+    <section className="avis-v2 reveal" id="avis" data-screen-label="Avis">
+      <div className="avis-v2-header">
+        <h2 className="section-title">{t.avisTitle[0]}<br/>{t.avisTitle[1]}</h2>
+        <div className="avis-v2-meta">
+          <span className="avis-v2-sub">★ 5.0 · Planity · 274 avis</span>
+          <div className="avis-nav">
+            <button className="avis-nav-btn" onClick={prev}>←</button>
+            <button className="avis-nav-btn" onClick={next}>→</button>
+          </div>
+        </div>
+      </div>
+      <div className="avis-track-outer">
+        <div className="avis-track" style={{ transform: `translateX(calc(-${page * 100}% - ${page * 2}px))` }}>
+          {t.avis.map((a, i) => (
+            <div key={i} className="avis-v2-card">
+              <div className="avis-v2-num">0{i+1}</div>
+              <div className="avis-v2-stars">
+                {[...Array(5)].map((_,j) => <span key={j} className="avis-v2-star">★</span>)}
+              </div>
+              <p className="avis-v2-text">"{a.text}"</p>
+              <span className="avis-v2-author">— {a.author}</span>
+              {a.date && <div className="avis-v2-date">{a.date}</div>}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="avis-dots">
+        {[...Array(pages)].map((_, i) => (
+          <div key={i} className={`avis-dot ${i === page ? 'active' : ''}`} onClick={() => setPage(i)}/>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Reservation({ t }) {
+  const [selected, setSelected] = useState(null);
+  return (
+    <section className="res-v2 reveal" id="reservation" data-screen-label="Réservation">
+      <div className="res-v2-left">
+        <div className="section-eyebrow">
+          <div className="eyebrow-line"/>
+          <span className="eyebrow-text">{t.resEyebrow}</span>
+        </div>
+        <h2 className="section-title">{t.resTitle[0]}<br/>{t.resTitle[1]}</h2>
+        <p className="res-v2-desc">{t.resDesc}</p>
+        <div className="res-v2-contact">
+          {t.resItems.map((item, i) => (
+            <div key={i} className="res-v2-item">
+              <span className="res-v2-item-label">{item.label}</span>
+              {item.link ? (
+                <a href={item.link} target={item.link.startsWith('tel')?'_self':'_blank'} rel="noopener noreferrer"
+                  style={{whiteSpace:'pre-line',color:'inherit',textDecoration:'underline',textUnderlineOffset:3,opacity:0.8}} className="res-v2-item-val">
+                  {item.val}
+                </a>
+              ) : (
+                <span className="res-v2-item-val" style={{whiteSpace:'pre-line'}}>{item.val}</span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="res-v2-right">
+        <div className="planity-v2">
+          <div className="planity-v2-header">
+            <span className="planity-v2-title">{t.planityTitle}</span>
+            <span className="planity-v2-badge">{t.planityBadge}</span>
+          </div>
+          <div className="planity-v2-body">
+            <div className="planity-v2-label">{t.planityLabel}</div>
+            <div className="planity-v2-slots">
+              {t.planitySlots.map((slot, i) => (
+                <div key={i}
+                  className={`planity-v2-slot ${selected===i?'selected':''}`}
+                  onClick={() => setSelected(selected===i?null:i)}>
+                  {slot}
+                </div>
+              ))}
+            </div>
+            {selected !== null && (
+              <button className="btn-dark" style={{width:'100%', marginBottom:16}} onClick={() => window.open(PLANITY_URL,'_blank')}>{t.cta1}</button>
+            )}
+            <a href={PLANITY_URL} target="_blank" rel="noopener noreferrer" className="btn-dark"
+              style={{display:'block',width:'100%',textAlign:'center',textDecoration:'none',padding:'14px 0',fontSize:10,letterSpacing:'0.2em'}}>
+              {t.cta1} →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MapSection() {
+  return (
+    <div className="map-section">
+      <iframe
+        src="https://maps.google.com/maps?q=39+Cours+Colonel+Petitpied+09500+Mirepoix&output=embed&hl=fr&z=16"
+        allowFullScreen
+        loading="lazy"
+        title="Les Coiffeurs — Mirepoix"
+      />
+    </div>
+  );
+}
+
+function Footer({ t }) {
+  return (
+    <footer className="footer-v2" id="footer" data-screen-label="Footer">
+      <div className="footer-v2-top">
+        <div>
+          <div className="footer-v2-logo">Les Coiffeurs</div>
+          <div className="footer-v2-tagline">{t.footTagline}</div>
+          <div className="footer-v2-socials">
+            <a href="https://www.instagram.com/les_coiffeurs_/" className="social-v2" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <defs>
+                  <linearGradient id="ig-g" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#F58529"/>
+                    <stop offset="50%" stopColor="#DD2A7B"/>
+                    <stop offset="100%" stopColor="#8134AF"/>
+                  </linearGradient>
+                </defs>
+                <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig-g)"/>
+                <circle cx="12" cy="12" r="4.5" stroke="white" strokeWidth="1.8" fill="none"/>
+                <circle cx="17.2" cy="6.8" r="1.1" fill="white"/>
+              </svg>
+            </a>
+            <a href="https://www.facebook.com/p/Les-Coiffeurs-Anne-Laure-Orlando-100063612037084/" className="social-v2" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2">
+                <path d="M24 12.073C24 5.404 18.627 0 12 0S0 5.404 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.27h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <div className="footer-v2-col-title">{t.footNav}</div>
+          <ul className="footer-v2-links">
+            {t.footLinks.map((l,i) => <li key={i}><a href="#">{l}</a></li>)}
+          </ul>
+        </div>
+        <div>
+          <div className="footer-v2-col-title">{t.footContact}</div>
+          <div className="footer-v2-info">
+            <div className="footer-v2-info-item">05 61 68 95 74</div>
+            <div className="footer-v2-info-item">39 Cours Colonel Petitpied<br/>09500 Mirepoix</div>
+          </div>
+        </div>
+        <div>
+          <div className="footer-v2-col-title">{t.footHours}</div>
+          <div className="footer-v2-info">
+            {t.footHoursItems.map((h,i) => <div key={i} className="footer-v2-info-item">{h}</div>)}
+          </div>
+        </div>
+      </div>
+      <div className="footer-v2-bottom">
+        <span className="footer-v2-copy">{t.footCopy}</span>
+        <span className="footer-v2-scissor">✂</span>
+      </div>
+    </footer>
+  );
+}
+
+function App() {
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [lang, setLang] = useState('fr');
+  const [scrolled, setScrolled] = useState(false);
+  const t = T[lang];
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.pageYOffset > 60);
+      document.querySelectorAll('.reveal, .reveal-left').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight * 0.88) el.classList.add('revealed');
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <>
+      <TweaksPanel>
+        <TweakSection label="Langue">
+          <TweakRadio label="Langue" value={lang}
+            options={[{value:'fr',label:'Français'},{value:'en',label:'English'}]}
+            onChange={setLang}/>
+        </TweakSection>
+        <TweakSection label="Éléments">
+          <TweakToggle label="Bande défilante" value={tweaks.showMarquee} onChange={v => setTweak('showMarquee', v)}/>
+        </TweakSection>
+        <TweakSection label="Style cartes">
+          <TweakRadio label="Avis" value={tweaks.cardStyle}
+            options={[{value:'minimal',label:'Minimal'},{value:'lined',label:'Ligné'}]}
+            onChange={v => setTweak('cardStyle', v)}/>
+        </TweakSection>
+      </TweaksPanel>
+
+      <Nav t={t} lang={lang} setLang={setLang} scrolled={scrolled}/>
+      <Hero t={t}/>
+      <Marquee show={tweaks.showMarquee}/>
+      <AboutStrip t={t}/>
+      <Services t={t}/>
+      <Galerie t={t}/>
+      <Avis t={t}/>
+      <Reservation t={t}/>
+      <MapSection/>
+      <Footer t={t}/>
+
+      <div style={{display:'none',position:'fixed',bottom:0,left:0,right:0,zIndex:999,padding:'14px 24px',background:'#141414',textAlign:'center',fontSize:11,fontWeight:500,letterSpacing:'0.2em',textTransform:'uppercase',color:'#F2EDE4',cursor:'pointer'}}
+        className="mobile-cta"
+        onClick={() => window.open(PLANITY_URL,'_blank')}>
+        {t.navCta}
+      </div>
+    </>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+
+<style>
+@media (max-width: 768px) {
+  .mobile-cta { display: block !important; }
+
+  /* NAV */
+  .nav { padding: 18px 20px; grid-template-columns: auto 1fr auto; }
+  .nav.scrolled { padding: 14px 20px; }
+  .nav-left { display: none; }
+  .nav-right a.nav-link { display: none; }
+  .nav-logo { font-size: 12px; letter-spacing: 0.18em; white-space: nowrap; }
+
+  /* HERO */
+  .hero-v2 { grid-template-columns: 1fr; min-height: auto; }
+  .hero-left { padding: 110px 24px 56px; justify-content: flex-start; }
+  .hero-right { height: 56vw; }
+  .hero-scroll-v2 { display: none; }
+  .hero-ctas-v2 { flex-direction: column; gap: 10px; }
+  .btn-dark, .btn-outline-dark { width: 100%; text-align: center; padding: 14px 20px; font-size: 9px; }
+
+  /* ABOUT */
+  .about-strip { grid-template-columns: 1fr; padding: 48px 32px; gap: 32px; }
+  .about-strip-divider { display: none; }
+
+  /* SERVICES */
+  .services-v2-header { grid-template-columns: 1fr; padding: 0 32px; gap: 24px; }
+  .services-v2-tabs { padding: 0 32px; }
+  .service-tab { padding: 14px 20px; font-size: 10px; }
+  .service-panel { grid-template-columns: 1fr; }
+  .service-panel-left { padding: 40px 32px; }
+  .service-panel-right { display: none; }
+
+  /* GALERIE */
+  .galerie-v2-header { padding: 0 32px; flex-direction: column; align-items: flex-start; gap: 16px; }
+  .galerie-v2-strip { grid-template-columns: 1fr 1fr; }
+  .gal-item-v2 img { min-height: 180px; }
+
+  /* AVIS */
+  .avis-v2-header { padding: 0 24px; flex-direction: column; align-items: flex-start; gap: 16px; }
+  .avis-v2-card { min-width: calc(100vw - 48px); }
+
+  /* RESERVATION */
+  .res-v2 { grid-template-columns: 1fr; }
+  .res-v2-left { padding: 60px 32px; border-right: none; border-bottom: 1px solid rgba(20,20,20,0.08); }
+  .res-v2-right { padding: 48px 32px; }
+
+  /* FOOTER */
+  .footer-v2 { padding: 60px 32px 40px; }
+  .footer-v2-top { grid-template-columns: 1fr; gap: 40px; }
+
+  /* MAP */
+  .map-section { height: 280px; }
+}
+</style>
+</body>
+</html>
