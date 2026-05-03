@@ -6,14 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Static React prototype — no `package.json`, bundler, CI, or test/lint config. All React and Babel run in-browser via CDN.
 
-- Primary app: `Les Coiffeurs v2.html` (single-page, ~1500 lines, inline JSX via Babel)
+- Primary app: `index.html` (single-page, ~1500 lines, inline JSX via Babel)
 - Shared helper: `tweaks-panel.jsx` (edit-mode UI kit loaded directly from HTML)
 
 ## Running Locally
 
 ```bash
 python3 -m http.server 8000
-# Open: http://localhost:8000/Les%20Coiffeurs%20v2.html
+# Open: http://localhost:8000/index.html
 ```
 
 Do not introduce bundler or build-tool assumptions unless explicitly asked.
@@ -22,7 +22,7 @@ Do not introduce bundler or build-tool assumptions unless explicitly asked.
 
 ### Single HTML entry point
 
-All CSS, components, and content live inline in `Les Coiffeurs v2.html`. Follow that pattern unless asked to restructure.
+All CSS, components, and content live inline in `index.html`. Follow that pattern unless asked to restructure.
 
 **Script load order is locked — do not reorder:**
 ```
@@ -37,7 +37,7 @@ Edit-mode protocol: listens for `__activate_edit_mode` / `__deactivate_edit_mode
 
 ### EDITMODE block
 
-Inside `Les Coiffeurs v2.html`, a `/*EDITMODE-BEGIN*/ ... /*EDITMODE-END*/` JSON block configures live-edit tweaks (`TWEAK_DEFAULTS`). Keep it valid JSON and leave the markers unchanged — they are host-managed.
+Inside `index.html`, a `/*EDITMODE-BEGIN*/ ... /*EDITMODE-END*/` JSON block configures live-edit tweaks (`TWEAK_DEFAULTS`). Keep it valid JSON and leave the markers unchanged — they are host-managed.
 
 ### Bilingual content
 
