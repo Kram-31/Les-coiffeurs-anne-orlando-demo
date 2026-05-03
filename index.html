@@ -1013,6 +1013,14 @@
 <div id="root"></div>
 
 <script type="text/babel" src="tweaks-panel.jsx"></script>
+<script>
+  if (typeof window.useTweaks === 'undefined') {
+    window.useTweaks = function(defaults) {
+      return React.useState(defaults);
+    };
+    window.TweaksPanel = function() { return null; };
+  }
+</script>
 
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
